@@ -6,7 +6,11 @@ class ArticleController {
     private $model;
 
     public function __construct() {
-        $this->model = new Article(); // Article internally creates PDO connection
+        // DÉMARRER LA SESSION DANS LE CONSTRUCTEUR
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $this->model = new Article();
     }
 
     // List all articles

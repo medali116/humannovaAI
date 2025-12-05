@@ -1,5 +1,5 @@
-<h1>Articles</h1>
-<a href="index.php?controller=article&action=create">Create New Article</a>
+ <h1>Articles</h1>
+<a href="index.php?controller=article&action=create">Create New Article</a> 
 <table border="1" cellpadding="5">
     <tr>
         <th>ID</th>
@@ -14,8 +14,8 @@
         <td><?= $a['date_creation'] ?></td>
         <td>
             <a href="index.php?controller=article&action=show&id=<?= $a['id'] ?>">View</a> |
-            <a href="index.php?controller=article&action=edit&id=<?= $a['id'] ?>">Edit</a> |
-            <a href="index.php?controller=article&action=delete&id=<?= $a['id'] ?>" onclick="return confirm('Delete this article?')">Delete</a>
+             <a href="index.php?controller=article&action=edit&id=<?= $a['id'] ?>">Edit</a> |
+            <a href="index.php?controller=article&action=delete&id=<?= $a['id'] ?>" onclick="return confirm('Delete this article?')">Delete</a> 
         </td>
     </tr>
     <?php endforeach; ?>

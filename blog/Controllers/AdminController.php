@@ -5,36 +5,59 @@ class AdminController {
     private $model;
 
     public function __construct() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $this->model = new Admin();
     }
 
     public function login() {
+        // Rediriger si déjà connecté
+        if (isset($_SESSION['admin'])) {
+            header('Location: index.php?controller=admin&action=index');
+            exit;
+        }
+
+        $error = null;
+
+        // Traiter le formulaire
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-            if ($this->model->login($username, $password)) {
-                session_start();
+            $username = trim($_POST['username'] ?? '');
+            $password = trim($_POST['password'] ?? '');
+            
+            // Log pour debug
+            error_log("Tentative de connexion - Username: " . $username);
+            
+            if ($this->model->authenticate($username, $password)) {
                 $_SESSION['admin'] = $username;
-                header("Location: index.php?controller=admin&action=index");
+                error_log("Connexion réussie, redirection vers dashboard");
+                header('Location: index.php?controller=admin&action=index');
+                exit;
             } else {
-                $error = "Invalid credentials!";
+                error_log("Échec de connexion");
+                $error = "Identifiants invalides";
             }
         }
-        include "Views/admin/login.php";
+        
+        // Afficher le formulaire
+        require_once "Views/admin/login.php";
+        exit;
     }
 
     public function index() {
-        session_start();
         if (!isset($_SESSION['admin'])) {
-            header("Location: index.php?controller=admin&action=login");
+            header('Location: index.php?controller=admin&action=login');
+            exit;
         }
-        include "Views/admin/index.php";
+        
+        require_once "Views/admin/index.php";
+        exit;
     }
 
     public function logout() {
-        session_start();
+        session_unset();
         session_destroy();
-        header("Location: index.php?controller=admin&action=login");
+        header('Location: index.php');
+        exit;
     }
 }
-?>

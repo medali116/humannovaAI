@@ -5,6 +5,10 @@ class InteractionController {
     private $model;
 
     public function __construct() {
+        // DÉMARRER LA SESSION DANS LE CONSTRUCTEUR
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $this->model = new Interaction();
     }
 
@@ -55,10 +59,6 @@ class InteractionController {
             $this->model->setEmail($email);
             $this->model->setMessage($message);
             $this->model->create();
-            
-            // Nettoyer les sessions après création réussie
-            unset($_SESSION['errors']);
-            unset($_SESSION['form_data']);
             
             $_SESSION['success'] = "Votre interaction a été ajoutée avec succès!";
             header("Location: index.php?controller=article&action=show&id=" . $article_id);
